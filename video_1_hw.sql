@@ -3,22 +3,22 @@ USE example;
 drop table if exists users;
 CREATE TABLE users (
 id SERIAL PRIMARY KEY,
-name VARCHAR(255) COMMENT '‘»Œ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ'
+name VARCHAR(255) COMMENT '–§–ò–û –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—è'
 );
 
 INSERT INTO users VALUES
-(NULL, '»‚‡ÌÓ‚ »‚‡Ì »‚‡ÌÓ‚Ë˜'),
-(NULL, 'œÂÚÓ‚ œÂÚ œÂÚÓ‚Ë˜'),
-(NULL, '—Ë‰ÓÓ‚ —Ë‰Ó —Ë‰ÓÓ‚Ë˜');
+(NULL, '–ò–≤–∞–Ω–æ–≤ –ò–≤–∞–Ω –ò–≤–∞–Ω–æ–≤–∏—á'),
+(NULL, '–ü–µ—Ç—Ä–æ–≤ –ü–µ—Ä—Ç—Ä –ü–µ—Ç—Ä–æ–≤–∏—á'),
+(NULL, '–°–∏–¥–æ—Ä–æ–≤ –°–∏–¥–æ—Ä –°–∏–¥–æ—Ä–æ–≤–∏—á');
 
--- mysqldump example > example_dump.sql # ÍÓÏ‡Ì‰‡ ‚ ÍÓÌÒÓÎË
+-- mysqldump example > example_dump.sql # –∫–æ–º–∞–Ω–¥–∞ –≤ –∫–æ–Ω—Å–æ–ª–∏
 
 -- CREATE DATABASE IF NOT EXISTS sample;
 
--- mysql sample < example_dump.sql # ÍÓÏ‡Ì‰‡ ‚ ÍÓÌÒÓÎË
+-- mysql sample < example_dump.sql # –∫–æ–º–∞–Ω–¥–∞ –≤ –∫–æ–Ω—Å–æ–ª–∏
 
 USE sample;
 SELECT * FROM users;
 
--- «‡‰‡ÌËÂ 4
+-- –ó–∞–¥–∞–Ω–∏–µ 4
 -- mysqldump mysql help_keyword --where="true limit 100" > mysql_dump.sql;
