@@ -1,3 +1,6 @@
+SET NAMES 'utf8';
+SET CHARACTER SET 'utf8';
+
 CREATE DATABASE IF NOT EXISTS example;
 USE example;
 drop table if exists users;
