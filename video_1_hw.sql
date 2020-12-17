@@ -21,4 +21,4 @@ USE sample;
 SELECT * FROM users;
 
 -- Задание 4
--- mysqldump mysql help_keyword --where="true limit 100" > mysql_dump.sql;
+-- mysqldump mysql help_keyword --where="TRUE ORDER BY help_keyword_id limit 100" > mysql_dump.sql;
