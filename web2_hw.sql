@@ -2,7 +2,7 @@
 1. Поле пол можно вынести в отдельный справочник для того, чтобы возможные варианты были заданы не программно, а выбирались из БД.
 По 1 символу не всегда можно понять что за пол подразумевается https://subscribe.ru/group/razumno-o-svoem-i-nabolevshem/6678982/
 Это также будет удобней для построения запросов, т.к., если нет доступа к программной обололочке, то для понимания возможных вариантов пола
- не будет необходимости перебрать всю базу и выбирать уникальные значения по данному полю. */
+ не будет необходимости перебирать всю базу и выбирать уникальные значения по данному полю. */
  
 -- Таблица профилей
 CREATE TABLE profiles (
@@ -43,5 +43,5 @@ CREATE TABLE friendship (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "Время создания строки",  
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Время обновления строки",  
   CONSTRAINT Friends_user_id_friend_id PRIMARY KEY (user_id, friend_id) COMMENT "Составной первичный ключ",
-  CONSTRAINT Friends_friend_id_user_id UNIQUE (friend_id, user_id) COMMENT "Дополнительное ограничение для уникальности дружеских отношений",
+  CONSTRAINT Friends_friend_id_user_id UNIQUE (friend_id, user_id) COMMENT "Дополнительное ограничение для уникальности дружеских отношений"
 ) COMMENT "Таблица дружбы";
