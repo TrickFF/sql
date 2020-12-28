@@ -106,8 +106,7 @@ SELECT FLOOR(AVG(TIMESTAMPDIFF(YEAR, birthday_at, NOW()))) AS avg_age FROM users
 SELECT DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day FROM users;
 
 -- подсчет дней
-SELECT DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day, COUNT(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day_count
-FROM users GROUP BY DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5)));
+SELECT DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day, COUNT(*) AS day_count FROM users GROUP BY day;
 
 
 /*  Задание 3
