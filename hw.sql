@@ -35,7 +35,7 @@ INSERT INTO users (name, birthday_at, created_at, updated_at) VALUES
    ('manager', '1973-01-15', '01.03.2016 10:12', '16.02.2020 17:01');
   
 
- UPDATE users SET 
+UPDATE users SET 
    created_at = STR_TO_DATE(created_at, '%d.%m.%Y %H:%i'),
    updated_at = STR_TO_DATE(updated_at, '%d.%m.%Y %H:%i');
   
@@ -102,13 +102,16 @@ SELECT FLOOR(AVG(TIMESTAMPDIFF(YEAR, birthday_at, NOW()))) AS avg_age FROM users
  * Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели.
  *  Следует учесть, что необходимы дни недели текущего года, а не года рождения. */
 
--- SELECT birthday_at FROM users;
--- SELECT DAYNAME(birthday_at) AS day FROM users;
+-- дни недели в этом году
 SELECT DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day FROM users;
+
+-- подсчет дней
+SELECT DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day, COUNT(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5))) AS day_count
+FROM users GROUP BY DAYNAME(CONCAT(SUBSTRING(NOW(), 1, 4), '-', SUBSTRING(birthday_at, 6, 5)));
+
 
 /*  Задание 3
  * (по желанию) Подсчитайте произведение чисел в столбце таблицы. */
-
 
 DROP TABLE IF EXISTS case3;
 CREATE TABLE case3 (
