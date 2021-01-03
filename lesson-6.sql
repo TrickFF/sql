@@ -329,7 +329,17 @@ WHERE user_id NOT IN
  * Найти 10 пользователей, которые проявляют наименьшую активность в
  *  использовании социальной сети (критерии активности необходимо определить самостоятельно). */
 
--- Выберем исходя из общего количества постов и поставленных лайков
+-- Выберем 10 наимеее активных исходя из общего количества постов и поставленных лайков
+SELECT 
+  id,
+  (SELECT first_name FROM profiles WHERE user_id = id) AS FirstName,
+  (SELECT last_name FROM profiles WHERE user_id = id) AS LastName,
+  (SELECT COUNT(*) FROM posts GROUP BY user_id HAVING user_id = id) AS posts,
+  (SELECT COUNT(*) FROM likes GROUP BY user_id HAVING user_id = id) AS likes,  
+  (SELECT SUM(posts + likes)) AS Total
+FROM users ORDER BY posts ASC, likes ASC LIMIT 10;
+
+-- Выберем 10 наиболее активных исходя из общего количества постов и поставленных лайков
 SELECT 
   id,
   (SELECT first_name FROM profiles WHERE user_id = id) AS FirstName,
