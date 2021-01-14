@@ -12,7 +12,7 @@ INSERT INTO `orders` VALUES (1,3,'2011-02-03 12:49:57','2018-05-14 10:43:53'),(2
 SELECT * FROM orders WHERE created_at > updated_at;
 UPDATE orders SET updated_at = CURRENT_TIMESTAMP() WHERE updated_at < created_at;
 
--- Для наглядности удаляем все заказа от пользователя с id = 4
+-- Для наглядности удаляем все заказы от пользователя с id = 4
 SELECT * FROM orders WHERE user_id = 4;
 DELETE FROM orders WHERE user_id = 4;
 
@@ -80,6 +80,6 @@ SELECT
  (SELECT c.name FROM cities c WHERE f.from = c.label) AS 'from',
  (SELECT c.name FROM cities c WHERE f.to = c.label) AS 'to'
 FROM
- flights AS f JOIN cities AS c
+ flights AS f
 GROUP BY f.id
 ORDER BY f.id;
