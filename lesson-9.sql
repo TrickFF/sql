@@ -121,15 +121,39 @@ USE shop;
 
 DELIMITER //
 
+-- результат
 DROP TRIGGER IF EXISTS check_prod_info_insert_update//
 CREATE TRIGGER check_prod_info_insert_update BEFORE INSERT OR UPDATE ON products
 FOR EACH ROW
 BEGIN
-	IF (NEW.name IS NULL) AND (NEW.description IS NULL)
-    	THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Оба поля name и description не могут быть пустыми"; 
+	IF (NEW.name IS NULL) AND (NEW.description IS NULL) THEN
+    	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Оба поля name и description не могут быть пустыми"; 
   	END IF;
 END//
 
-DELIMITER ;
+/* Задание 3
+ * (по желанию) Напишите хранимую функцию для вычисления произвольного числа Фибоначчи.
+ *  Числами Фибоначчи называется последовательность в которой число равно сумме двух предыдущих чисел.
+ *  Вызов функции FIBONACCI(10) должен возвращать число 55.*/
 
-INSERT INTO products (name, description, price, catalog_id) VALUES (NULL, NULL, 15421, 2);
+USE shop;
+
+DELIMITER //
+
+-- результат
+DROP FUNCTION IF EXISTS fibonacci//
+CREATE FUNCTION fibonacci (num INT)
+RETURNS INT DETERMINISTIC
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  DECLARE num2 INT DEFAULT 0;
+	WHILE i <= num DO
+	  SET num2 = num2 + i;
+  	  SET i = i + 1;
+	END WHILE;
+	
+	RETURN num2;
+END//
+
+SET @num = 10//
+SELECT fibonacci(@num)//
