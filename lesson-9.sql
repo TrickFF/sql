@@ -120,8 +120,8 @@ CALL hello()//
 USE shop;
 
 -- результат
-DROP TRIGGER IF EXISTS check_prod_info_insert_update//
-CREATE TRIGGER check_prod_info_insert_update BEFORE INSERT ON products
+DROP TRIGGER IF EXISTS check_prod_info_insert//
+CREATE TRIGGER check_prod_info_insert BEFORE INSERT ON products
 FOR EACH ROW
 BEGIN
 	IF (NEW.name IS NULL) AND (NEW.description IS NULL) THEN
