@@ -119,11 +119,9 @@ CALL hello()//
 
 USE shop;
 
-DELIMITER //
-
 -- результат
 DROP TRIGGER IF EXISTS check_prod_info_insert_update//
-CREATE TRIGGER check_prod_info_insert_update BEFORE INSERT OR UPDATE ON products
+CREATE TRIGGER check_prod_info_insert_update BEFORE INSERT ON products
 FOR EACH ROW
 BEGIN
 	IF (NEW.name IS NULL) AND (NEW.description IS NULL) THEN
@@ -138,7 +136,6 @@ END//
 
 USE shop;
 
-DELIMITER //
 
 -- результат
 DROP FUNCTION IF EXISTS fibonacci//
