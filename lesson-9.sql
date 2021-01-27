@@ -176,21 +176,25 @@ SHOW grants FOR 'user_read'@'localhost';
  *  С 6:00 до 12:00 функция должна возвращать фразу "Доброе утро", с 12:00 до 18:00 функция должна возвращать фразу
  *  "Добрый день", с 18:00 до 00:00 — "Добрый вечер", с 00:00 до 6:00 — "Доброй ночи".*/
 
+USE shop;
+
+DELIMITER //
+
 -- функция
 DROP FUNCTION IF EXISTS hello//
 CREATE FUNCTION hello (hh INT)
 RETURNS TEXT DETERMINISTIC
 BEGIN
-  IF (hh > 6 AND hh <= 12) THEN
+  IF (hh >= 6 AND hh < 12) THEN
       RETURN  "Доброе утро";
   END IF;
-  IF (hh > 12 AND hh <= 18) THEN
+  IF (hh >= 12 AND hh < 18) THEN
       RETURN "Добрый день";
   END IF;
-  IF (hh > 18 AND hh <= 24) THEN
+  IF (hh >= 18 AND hh < 24) THEN
       RETURN "Добрый вечер";
   END IF;
-  IF (hh > 0 AND hh <= 6) THEN
+  IF (hh >= 0 AND hh < 6) THEN
       RETURN "Доброй ночи";
   END IF;
 END//
@@ -202,16 +206,16 @@ DROP PROCEDURE IF EXISTS hello//
 CREATE PROCEDURE hello ()
 BEGIN
  SET @t = DATE_FORMAT(CURRENT_TIMESTAMP, '%H');
-  IF (@t > 6 AND @t <= 12) THEN
+  IF (@t >= 6 AND @t < 12) THEN
       SELECT "Доброе утро" AS 'greetings';
   END IF;
-  IF (@t > 12 AND @t <= 18) THEN
+  IF (@t >= 12 AND @t < 18) THEN
       SELECT "Добрый день" AS 'greetings';
   END IF;
-  IF (@t > 18 AND @t <= 24) THEN
+  IF (@t >= 18 AND @t < 24) THEN
       SELECT "Добрый вечер" AS 'greetings';
   END IF;
-  IF (@t > 0 AND @t <= 6) THEN
+  IF (@t >= 0 AND @t < 6) THEN
       SELECT "Доброй ночи" AS 'greetings';
   END IF;
 END//
@@ -226,15 +230,39 @@ CALL hello()//
 
 USE shop;
 
+DELIMITER //
+
 -- результат
 DROP TRIGGER IF EXISTS check_prod_info_insert//
 CREATE TRIGGER check_prod_info_insert BEFORE INSERT ON products
 FOR EACH ROW
 BEGIN
 	IF (NEW.name IS NULL) AND (NEW.description IS NULL) THEN
-    	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Оба поля name и description не могут быть пустыми"; 
+    	SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Fields name and description can not be equal NULL both'; 
   	END IF;
 END//
+
+DROP TRIGGER IF EXISTS check_prod_info_update//
+CREATE TRIGGER check_prod_info_update BEFORE UPDATE ON products
+FOR EACH ROW
+BEGIN
+	IF (NEW.name IS NULL) AND (NEW.description IS NULL) THEN
+    	SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Fields name and description can not be equal NULL both'; 
+  	END IF;
+END//
+
+-- проверка вставки новой записи
+INSERT INTO products (name, description, price, catalog_id)
+VALUES
+  (NULL, NULL, 98461, 2);
+ 
+-- проверка изменения записи
+UPDATE products
+ SET name = NULL, description = NULL
+WHERE id = 1;
+ 
 
 /* Задание 3
  * (по желанию) Напишите хранимую функцию для вычисления произвольного числа Фибоначчи.
@@ -243,6 +271,7 @@ END//
 
 USE shop;
 
+DELIMITER //
 
 -- результат
 DROP FUNCTION IF EXISTS fibonacci//
