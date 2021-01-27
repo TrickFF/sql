@@ -34,8 +34,45 @@ SELECT * FROM prod_name;
  *  '2018-08-16' и 2018-08-17. Составьте запрос, который выводит полный список дат за август,
  *  выставляя в соседнем поле значение 1, если дата присутствует в исходном таблице и 0, если она отсутствует.*/
 
-Задача не ясна.
+USE sample;
 
+DROP TABLE IF EXISTS posts;
+CREATE TABLE IF NOT EXISTS posts (
+ id SERIAL PRIMARY KEY,
+ name VARCHAR(255),
+ created_at DATE NOT NULL
+);
+
+INSERT INTO posts VALUES
+(NULL, 'one', '2018-08-01'),
+(NULL, 'two', '2018-08-04'),
+(NULL, 'three', '2018-08-16'),
+(NULL, 'four', '2018-08-17');
+
+
+CREATE TEMPORARY TABLE last_days (
+day INT
+);
+
+INSERT INTO last_days VALUES
+(0), (1), (2), (3), (4), (5), (6), (7), (8), (9), (10),
+(11), (12), (13), (14), (15), (16), (17), (18), (19), (20),
+(21), (22), (23), (24), (25), (26), (27), (28), (29), (30);
+
+-- результат
+SELECT
+ DATE(DATE('2018-08-31') - INTERVAL l.day DAY) AS day,
+ NOT ISNULL(p.name) AS order_exist
+FROM
+ last_days AS l
+LEFT JOIN
+ posts AS p
+ON
+ DATE(DATE('2018-08-31') - INTERVAL l.day DAY) = p.created_at
+ORDER BY
+ day;
+
+ 
 /* Задание 4
  * (по желанию) Пусть имеется любая таблица с календарным полем created_at. 
  * Создайте запрос, который удаляет устаревшие записи из таблицы, оставляя только 5 самых свежих записей.*/
