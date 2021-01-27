@@ -59,7 +59,7 @@ INSERT INTO last_days VALUES
 (11), (12), (13), (14), (15), (16), (17), (18), (19), (20),
 (21), (22), (23), (24), (25), (26), (27), (28), (29), (30);
 
--- результат
+-- результат через временную таблицу
 SELECT
  DATE(DATE('2018-08-31') - INTERVAL l.day DAY) AS day,
  NOT ISNULL(p.name) AS order_exist
@@ -72,10 +72,27 @@ ON
 ORDER BY
  day;
 
+
+-- результат через рекрсивное выражение
+SELECT s.check_date, NOT ISNULL(p.name) order_exist FROM (
+WITH RECURSIVE sequence AS (
+ SELECT 0 AS level
+ UNION ALL
+ SELECT level + 1 AS value FROM sequence WHERE sequence.level < 30
+)
+SELECT DATE(DATE('2018-08-31') - INTERVAL s.level DAY) AS check_date
+FROM `sequence` s
+) s
+LEFT JOIN posts p ON p.created_at = s.check_date
+ORDER BY 1;
+
+
  
 /* Задание 4
  * (по желанию) Пусть имеется любая таблица с календарным полем created_at. 
  * Создайте запрос, который удаляет устаревшие записи из таблицы, оставляя только 5 самых свежих записей.*/
+
+USE shop;
 
 -- создаем копию таблицы orders
 DROP TABLE IF EXISTS orders_1;
@@ -98,6 +115,59 @@ DROP VIEW last_5_dates;
 COMMIT;
 
 
+/* Практическое задание по теме “Администрирование MySQL” (эта тема изучается по вашему желанию) */
+
+/* Задание 1
+ * Создайте двух пользователей которые имеют доступ к базе данных shop. Первому пользователю shop_read
+ *  должны быть доступны только запросы на чтение данных, второму пользователю shop — любые операции в пределах базы данных shop.*/
+
+DROP USER IF EXISTS 'shop_read'@'localhost';
+CREATE USER IF NOT EXISTS 'shop_read'@'localhost' identified BY 'password';
+GRANT SELECT, SHOW VIEW ON shop.* TO 'shop_read'@'localhost';
+
+DROP USER IF EXISTS 'shop'@'localhost';
+CREATE USER IF NOT EXISTS 'shop'@'localhost' identified BY 'password';
+GRANT ALL ON shop.* TO 'shop'@'localhost';
+
+SHOW grants FOR 'shop_read'@'localhost';
+SHOW grants FOR 'shop'@'localhost';
+
+/* Задание 2
+ * (по желанию) Пусть имеется таблица accounts содержащая три столбца id, name, password, содержащие первичный ключ,
+ *  имя пользователя и его пароль. Создайте представление username таблицы accounts, предоставляющий доступ к столбца id и name.
+ *  Создайте пользователя user_read, который бы не имел доступа к таблице accounts, однако, мог бы извлекать записи из представления username.*/
+
+USE shop;
+
+DROP TABLE IF EXISTS accounts;
+CREATE TABLE IF NOT EXISTS accounts (
+ id SERIAL PRIMARY KEY,
+ name VARCHAR(255),
+ password VARCHAR(255)
+ );
+
+INSERT INTO `accounts` VALUES 
+(1,'Moriah','b597e4007d365f32cc25d1ba6d50a93a374fe5a8'),
+(2,'Beau','6bc537e7743977f18eb48ee0f59c241dbccc6151'),
+(3,'Joe','4e52e159b9210d7adb0c3ee45ce973a4a9ed356c'),
+(4,'Laurel','50927a399322f99681ed8c575e634306cdd0aa83'),
+(5,'Jamel','3582d38a26edd2bb4f2f8c1ec67661aaa29e973f'),
+(6,'Khalid','762930fbe70c0fd48c1619e38013c018bd8afa55'),
+(7,'Braulio','a749a2b2d85674ddc3aa87a0fc128f0461863944'),
+(8,'Kelton','ea1b2d1ea8a948322f5b5896e896ff8d934b2781'),
+(9,'Garth','d7aa57dbe15eda480bcf3c073b9efb333172a2fa'),
+(10,'Crawford','f61e62bd72563fc659a20f587d238f1d24bcee4d');
+
+
+CREATE OR REPLACE VIEW username AS SELECT id, name FROM accounts;
+
+SELECT * FROM username;
+
+DROP USER IF EXISTS 'user_read'@'localhost';
+CREATE USER IF NOT EXISTS 'user_read'@'localhost' identified BY 'password';
+GRANT SELECT (id, name) ON shop.username TO 'user_read'@'localhost';
+
+SHOW grants FOR 'user_read'@'localhost';
 
 /* Практическое задание по теме “Хранимые процедуры и функции, триггеры" */
 
