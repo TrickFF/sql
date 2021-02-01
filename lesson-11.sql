@@ -59,7 +59,7 @@ DELIMITER ;
 -- тестовые данные
 INSERT INTO users (name, birthday_at) VALUES
   ('user1', '1976-12-10'),
-  ('user2', '1993-06-08'),);
+  ('user2', '1993-06-08');
  
 INSERT INTO catalogs (name) VALUES
   ('Жесткие диски'),
