@@ -32,9 +32,11 @@ CREATE INDEX communities_name_idx ON communities(name);
  - отношение в процентах (общее количество пользователей в группе / всего пользователей в системе) * 100 */
 
 -- результат
+USE vk;
+
 SELECT DISTINCT
   c.name,
-  COUNT(cu.user_id) OVER () / LAST_VALUE(c.id) OVER () AS avg_size,
+  COUNT(cu.user_id) OVER () / (SELECT COUNT(*) FROM communities) AS avg_size,
   MAX(p.birthday) OVER w AS youngest,
   MIN(p.birthday) OVER w AS oldest,
   COUNT(cu.user_id) OVER w AS group_size,
